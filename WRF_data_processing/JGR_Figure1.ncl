@@ -9,55 +9,25 @@ begin
 	plotName = "picture/Figure1-2"
 	Dir  = "data/"
 
-	name = (/"uv.nc","ctl_uv.nc","IBTrACS.last3years.v04r00.nc" /)
-  name2= (/"RAD.txt","CLD.txt","CTL.txt","CLEAN.txt","CLEAN2.txt"/)
+	name = (/"uv.nc","IBTrACS.last3years.v04r00.nc" /)
+  name2= (/"RAD.txt","CLD.txt","CTL.txt","CLEAN.txt"/)
   
 ; read data; time interval is 3 hour wrfout
 
-    f          = addfiles( Dir+name, "r" )
-  
-    v        = dim_avg_n_Wrap(f[0]->tangen_v,3)
-	v_ctl    = dim_avg_n_Wrap(f[1]->tangen_v,3)
+  f          = addfiles( Dir+name, "r" )
+  v          = dim_avg_n_Wrap(f[0]->tangen_v,3)
+	vmax       = new((/4,17/),float)
 
-	vmax       = new((/5,17/),float)
-    slp        = new((/5,17/),float)
 	printVarSummary(v)
-   do i=0,4
+  do i=0,4
 		k = 0
-	do j=0,16
-		if i .lt. 3 then
-		vmax(i,k) = max(v(i,j,:100))/0.51444
-		k=k+1
-		else
-		vmax(i,k) = max(v_ctl(i-3,j,:100))/0.51444
-		k=k+1		
-		end if
-	end do
+    do j=0,16
+        vmax(i,j) = max(v(i,j,:100))/0.51444
+	  end do
   end do
 	printVarSummary(vmax)
 	;  compute radial wind 
-  vmax_jtwc     = f[2]->usa_wind(154,0:14)
-  slp_jtwc      = f[2]->usa_pres(154,0:14)
-  printVarSummary(vmax_jtwc)
-  
-  RAD           = asciiread(Dir+name2(0), -1, "string")
-  CLD           = asciiread(Dir+name2(1), -1, "string")
-  CTL           = asciiread(Dir+name2(2), -1, "string")
-  CLEAN         = asciiread(Dir+name2(3), -1, "string")
-  CLEAN2        = asciiread(Dir+name2(4), -1, "string")
-
-  slp(0,:)      = stringtofloat(str_get_field(RAD, 5, ","))
-  slp(1,:)      = stringtofloat(str_get_field(CLD, 5, ","))
-  slp(2,:)      = stringtofloat(str_get_field(CTL, 5, ","))
-  slp(3,:)      = stringtofloat(str_get_field(CLEAN, 5, ","))
-  slp(4,:)      = stringtofloat(str_get_field(CLEAN2, 5, ","))
-  
-  
-  
-  
-  
-  
-  
+  vmax_jtwc     = f[2]->usa_wind(154,0:14)  
 
   ;;;;;;;;;;;;;;;
   ;; plot part
@@ -65,7 +35,7 @@ begin
   
   plot      = new(4,"graphic")
   wks = gsn_open_wks(plotType,plotName)
-  colors                = (/"royalblue1","springgreen3","salmon","grey35","grey35"/)
+  colors                = (/"royalblue1","springgreen3","salmon","grey35"/)
   res                  = True 
   ;res@gsnMaximize      = True
   res@txFont           = 25

@@ -1,10 +1,10 @@
 ;2022.11.04 mar
 
 begin
-	filename         = (/"CTL","MICRO","RAD","CLEAN"/)
+	filename         = (/"RAD","CLD","CTL","CLEAN"/)
 	;read tc center data
-	TCcent           = (/"CTL_cent.txt","MICRO_cent.txt",\
-	"RAD_cent.txt","CLEAN_cent.txt"/)
+	TCcent           = (/"RAD_cent.txt","CLD_cent.txt",\
+	"CTL_cent.txt","CLEAN_cent.txt"/)
 	nfile            = dimsizes(TCcent) 
 	nrow             = numAsciiRow(TCcent(0))
 	centi            = new((/nfile,nrow/), "float")

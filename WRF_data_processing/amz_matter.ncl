@@ -1,7 +1,7 @@
 ;2022.11.14 mar
 
 begin
-	filename         = (/"CTL","MICRO","RAD","CLEAN"/)
+	filename         = (/"RAD","CLD","CTL","CLEAN"/)
 	dir              = "../"
 	
 	;read tc center data
